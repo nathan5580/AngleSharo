@@ -19,10 +19,10 @@ namespace AngleSharo
         public static async void DoSomething()
         {
             var config = Configuration.Default.WithDefaultLoader();
-            var address = "https://en.wikipedia.org/wiki/List_of_The_Big_Bang_Theory_episodes";
+            var address = "https://playoverwatch.com/fr-fr/heroes/";
             var context = BrowsingContext.New(config);
             var document = await context.OpenAsync(address);
-            var cellSelector = "tr.vevent td:nth-child(3)";
+            var cellSelector = "span.portrait-title";
             var cells = document.QuerySelectorAll(cellSelector);
             var titles = cells.Select(m => m.TextContent);
 
