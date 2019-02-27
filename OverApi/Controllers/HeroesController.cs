@@ -1,10 +1,8 @@
-﻿using System;
+﻿using AngleSharp;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AngleSharp;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace OverApi.Controllers
 {
@@ -12,7 +10,7 @@ namespace OverApi.Controllers
     [ApiController]
     public class HeroesController : ControllerBase
     {
-        [HttpGet,Route("Get")]
+        [HttpGet, Route("Get")]
         public async Task<ActionResult<IEnumerable<string>>> GetAllHeroesAsync()
         {
             var config = Configuration.Default.WithDefaultLoader();
@@ -28,6 +26,25 @@ namespace OverApi.Controllers
                 var titles = cells.Select(m => m.TextContent);
 
                 return titles.ToList();
+            }
+        }
+
+        [HttpGet, Route("Get/{hero}")]
+        public async Task<ActionResult<IEnumerable<string>>> GetHero([FromRoute]string hero)
+        {
+            var config = Configuration.Default.WithDefaultLoader();
+            var address = "https://playoverwatch.com/fr-fr/heroes/mercy/";
+            var context = BrowsingContext.New(config);
+            var document = await context.OpenAsync(address);
+
+
+            using (document)
+            {
+
+                var cells = document.QuerySelectorAll("span.hero-bio-copy");
+                var x = cells.Select(c => c.TextContent);
+
+                return Ok();
             }
         }
     }
